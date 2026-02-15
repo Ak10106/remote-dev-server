@@ -41,6 +41,17 @@ resource "aws_security_group_rule" "alb_http_in" {
   security_group_id = aws_security_group.alb.id
 }
 
+# Allow outbound HTTPS for Cognito authentication
+resource "aws_security_group_rule" "alb_https_out" {
+  type              = "egress"
+  description       = "HTTPS to Cognito and internet (for authentication)"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.alb.id
+}
+
 # Allow outbound to EC2 on application ports
 resource "aws_security_group_rule" "alb_to_ec2_vscode" {
   type                     = "egress"

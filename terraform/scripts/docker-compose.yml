@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # VS Code Server
+  code-server:
+    image: codercom/code-server:latest
+    container_name: code-server
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /home/ubuntu/workspace:/home/coder/project
+      - /home/ubuntu/.config/code-server:/home/coder/.config
+    environment:
+      - TZ=Asia/Tokyo
+      - PASSWORD=${VSCODE_PASSWORD}
+    command: --bind-addr 0.0.0.0:8080 --auth ${VSCODE_AUTH_TYPE} /home/coder/project
+    networks:
+      - app-network
+
+  # Claude Code UI
+  claude-code-ui:
+    image: node:22
+    container_name: claude-code-ui
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "3001:3001"
+    volumes:
+      - /home/ubuntu/claude-code-ui:/app
+      - /home/ubuntu/.claude-code-ui-config:/root/.config
+    environment:
+      - TZ=Asia/Tokyo
+      - NODE_ENV=production
+      - AWS_REGION=${AWS_REGION}
+    command: npx @siteboon/claude-code-ui
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,66 @@
+# ============================================
+# General Configuration
+# ============================================
+aws_region   = "ap-northeast-1"
+project_name = "remote-dev-server"
+environment  = "development"
+owner_email  = "your.email@example.com"
+
+# ============================================
+# Domain & DNS Configuration
+# ============================================
+root_domain_name     = "example.com"                  # Your existing domain
+subdomain_name       = "dev"                          # Creates dev.example.com
+create_route53_zone  = false                          # Set true if zone doesn't exist
+route53_zone_id      = "Z1234567890ABC"              # Required if create_route53_zone = false
+
+# ============================================
+# VPC & Networking Configuration
+# ============================================
+vpc_cidr              = "10.0.0.0/16"
+availability_zones    = []                            # Empty = use first 2 AZs in region
+public_subnet_cidrs   = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs  = ["10.0.11.0/24", "10.0.12.0/24"]
+enable_nat_gateway    = true
+single_nat_gateway    = true                          # true = cost saving, false = HA
+
+# ============================================
+# EC2 Instance Configuration
+# ============================================
+instance_type      = "t3.medium"
+root_volume_size   = 100
+root_volume_type   = "gp3"
+
+# ============================================
+# Application Configuration
+# ============================================
+vscode_port    = 8080
+claude_ui_port = 3001
+vscode_password = ""                                  # Optional: Leave empty to disable password auth
+
+# ============================================
+# Cognito Configuration
+# ============================================
+cognito_user_pool_name   = "remote-dev-server-users"
+cognito_domain_prefix    = "your-unique-prefix-12345"  # Must be globally unique
+create_cognito_admin_user = false                      # Set true to create admin user
+cognito_admin_email      = ""                          # Required if create_cognito_admin_user = true
+
+# ============================================
+# Backup Configuration
+# ============================================
+enable_backup          = true
+backup_retention_days  = 7
+backup_schedule        = "cron(0 2 * * ? *)"          # Daily at 2 AM UTC (11 AM JST)
+
+# ============================================
+# Security Configuration
+# ============================================
+allowed_cidr_blocks          = ["0.0.0.0/0"]          # Restrict to your IP for better security
+enable_ssm_session_manager   = true
+
+# ============================================
+# Monitoring & Logging
+# ============================================
+enable_detailed_monitoring = false
+alb_access_logs_enabled    = false                    # S3 bucket created automatically if enabled

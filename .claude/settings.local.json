@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:logan-cox.com)",
+      "mcp__builder-mcp__InternalSearch"
+    ]
+  }
+}

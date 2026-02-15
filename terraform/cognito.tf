@@ -111,8 +111,27 @@ resource "aws_cognito_user_pool_client" "main" {
 # ============================================
 
 resource "aws_cognito_user_pool_domain" "main" {
-  domain       = var.cognito_domain_prefix
-  user_pool_id = aws_cognito_user_pool.main.id
+  domain                  = var.cognito_domain_prefix
+  user_pool_id            = aws_cognito_user_pool.main.id
+  managed_login_version   = 2 # Enable new managed login UI
+}
+
+# ============================================
+# Managed Login Branding (New UI)
+# ============================================
+
+resource "aws_cognito_managed_login_branding" "main" {
+  user_pool_id         = aws_cognito_user_pool.main.id
+  client_id            = aws_cognito_user_pool_client.main.id
+  use_cognito_provided_values = true # Use Cognito default branding
+
+  # Optional: Customize branding with your own settings
+  # settings = jsonencode({
+  #   primaryColor = "#FF9900"
+  #   logoUrl      = "https://your-domain.com/logo.png"
+  # })
+
+  depends_on = [aws_cognito_user_pool_domain.main]
 }
 
 # ============================================

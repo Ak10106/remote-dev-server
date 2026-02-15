@@ -79,18 +79,11 @@ echo "AWS CLI version: $(aws --version)"
 # Install Node.js 22
 # ============================================
 echo "[5/8] Installing Node.js 22..."
-# Remove any existing Node.js from Ubuntu repos
-apt-get remove -y nodejs npm libnode* 2>/dev/null || true
-apt-get autoremove -y
-
-# Install Node.js 22 from NodeSource
-curl -fsSL https://deb.nodesource.com/setup_22.x -o /tmp/nodesource_setup.sh
-bash /tmp/nodesource_setup.sh
+# Install Node.js 22 from NodeSource (script handles cleanup automatically)
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
 apt-get install -y nodejs
 
 # Verify installation
-node --version
-npm --version
 echo "Node.js version: $(node --version)"
 echo "npm version: $(npm --version)"
 

@@ -35,16 +35,9 @@ variable "subdomain_name" {
   default     = "dev"
 }
 
-variable "create_route53_zone" {
-  description = "Whether to create a new Route53 hosted zone for root domain. Set false if zone already exists."
-  type        = bool
-  default     = false
-}
-
 variable "route53_zone_id" {
-  description = "Existing Route53 hosted zone ID for root domain. Required if create_route53_zone = false"
+  description = "Existing Route53 hosted zone ID for root domain (REQUIRED)"
   type        = string
-  default     = ""
 }
 
 # ============================================

@@ -15,8 +15,6 @@ project_name = "remote-dev-server"              # Max 20 chars
 # ============================================
 root_domain_name     = "example.com"                  # Your existing domain
 subdomain_name       = "dev"                          # Creates dev.example.com
-create_route53_zone  = false                          # Set true if zone doesn't exist
-route53_zone_id      = "Z1234567890ABC"              # Required if create_route53_zone = false
 
 # ============================================
 # VPC & Networking Configuration

@@ -29,6 +29,9 @@ resource "aws_lb" "main" {
       Name = "${local.name_prefix}-alb"
     }
   )
+
+  # Ensure S3 bucket policy is applied before ALB tries to write logs
+  depends_on = [aws_s3_bucket_policy.alb_logs]
 }
 
 # ============================================

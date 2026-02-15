@@ -33,12 +33,9 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-# Get existing Route53 hosted zone (if not creating new one)
+# Get existing Route53 hosted zone
 data "aws_route53_zone" "main" {
-  count = var.create_route53_zone ? 0 : 1
-
-  name         = var.root_domain_name
-  private_zone = false
+  zone_id = var.route53_zone_id
 }
 
 # Get current AWS account ID

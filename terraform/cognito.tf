@@ -36,8 +36,8 @@ resource "aws_cognito_user_pool" "main" {
   # Auto-verify email
   auto_verified_attributes = ["email"]
 
-  # MFA configuration (optional)
-  mfa_configuration = "OPTIONAL"
+  # MFA configuration (disabled for dev environment)
+  mfa_configuration = "OFF"
 
   # Account recovery
   account_recovery_setting {
@@ -67,6 +67,9 @@ resource "aws_cognito_user_pool" "main" {
 resource "aws_cognito_user_pool_client" "main" {
   name         = "${var.project_name}-client"
   user_pool_id = aws_cognito_user_pool.main.id
+
+  # Generate client secret (required for ALB authentication)
+  generate_secret = true
 
   # OAuth configuration for ALB
   allowed_oauth_flows_user_pool_client = true

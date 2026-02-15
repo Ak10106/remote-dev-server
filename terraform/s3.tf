@@ -27,7 +27,9 @@ resource "aws_s3_bucket_versioning" "alb_logs" {
   }
 }
 
-# Server-side encryption with KMS
+# Server-side encryption with S3-managed keys (SSE-S3)
+# Note: ALB access logs only support SSE-S3, not KMS encryption
+# Reference: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/enable-access-logging.html
 resource "aws_s3_bucket_server_side_encryption_configuration" "alb_logs" {
   count = var.alb_access_logs_enabled ? 1 : 0
 
@@ -35,10 +37,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "alb_logs" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
-      kms_master_key_id = aws_kms_key.main.arn
+      sse_algorithm = "AES256" # S3-managed encryption (SSE-S3)
     }
-    bucket_key_enabled = true
+    bucket_key_enabled = false # Not applicable for SSE-S3
   }
 }
 
@@ -94,20 +95,17 @@ resource "aws_s3_bucket_policy" "alb_logs" {
         Sid    = "AWSLogDeliveryWrite"
         Effect = "Allow"
         Principal = {
-          Service = "elasticloadbalancing.amazonaws.com"
+          Service = "logdelivery.elasticloadbalancing.amazonaws.com"
         }
         Action   = "s3:PutObject"
-        Resource = "${aws_s3_bucket.alb_logs[0].arn}/*"
-      },
-      {
-        Sid    = "AWSLogDeliveryAclCheck"
-        Effect = "Allow"
-        Principal = {
-          Service = "elasticloadbalancing.amazonaws.com"
-        }
-        Action   = "s3:GetBucketAcl"
-        Resource = aws_s3_bucket.alb_logs[0].arn
+        Resource = "${aws_s3_bucket.alb_logs[0].arn}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
       }
     ]
   })
+
+  # Ensure all bucket configurations are complete before applying policy
+  depends_on = [
+    aws_s3_bucket_public_access_block.alb_logs,
+    aws_s3_bucket_server_side_encryption_configuration.alb_logs
+  ]
 }

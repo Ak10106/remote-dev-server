@@ -21,7 +21,7 @@ resource "aws_instance" "dev_server" {
   root_block_device {
     volume_type           = var.root_volume_type
     volume_size           = var.root_volume_size
-    delete_on_termination = true
+    delete_on_termination = false # Keep EBS volume when instance is replaced
     encrypted             = true
 
     tags = merge(

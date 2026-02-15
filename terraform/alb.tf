@@ -9,8 +9,8 @@ resource "aws_lb" "main" {
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public[*].id
 
-  enable_deletion_protection = false
-  enable_http2               = true
+  enable_deletion_protection       = false
+  enable_http2                     = true
   enable_cross_zone_load_balancing = true
 
   # Access logs (optional)
@@ -159,7 +159,7 @@ resource "aws_lb_listener" "https" {
 
   # Default action: Authenticate with Cognito, then forward to Claude UI
   default_action {
-    type = "authenticate-cognito"
+    type  = "authenticate-cognito"
     order = 1
 
     authenticate_cognito {
@@ -198,7 +198,7 @@ resource "aws_lb_listener_rule" "vscode" {
   priority     = 100
 
   action {
-    type = "authenticate-cognito"
+    type  = "authenticate-cognito"
     order = 1
 
     authenticate_cognito {

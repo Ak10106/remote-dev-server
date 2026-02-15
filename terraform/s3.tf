@@ -64,6 +64,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "alb_logs" {
     id     = "delete-old-logs"
     status = "Enabled"
 
+    filter {}
+
     expiration {
       days = 90 # Keep logs for 90 days
     }
@@ -94,7 +96,7 @@ resource "aws_s3_bucket_policy" "alb_logs" {
         Principal = {
           Service = "elasticloadbalancing.amazonaws.com"
         }
-        Action = "s3:PutObject"
+        Action   = "s3:PutObject"
         Resource = "${aws_s3_bucket.alb_logs[0].arn}/*"
       },
       {
@@ -103,7 +105,7 @@ resource "aws_s3_bucket_policy" "alb_logs" {
         Principal = {
           Service = "elasticloadbalancing.amazonaws.com"
         }
-        Action = "s3:GetBucketAcl"
+        Action   = "s3:GetBucketAcl"
         Resource = aws_s3_bucket.alb_logs[0].arn
       }
     ]

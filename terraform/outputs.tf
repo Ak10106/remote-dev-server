@@ -185,7 +185,7 @@ output "kms_key_arn" {
 
 output "next_steps" {
   description = "Next steps after deployment"
-  value = <<-EOT
+  value       = <<-EOT
 
   ✅ Deployment Complete!
 

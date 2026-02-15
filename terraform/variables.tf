@@ -9,21 +9,16 @@ variable "aws_region" {
 }
 
 variable "project_name" {
-  description = "Project name used for resource naming and tagging"
+  description = "Project name used for resource naming and tagging (max 15 characters recommended)"
   type        = string
   default     = "remote-dev-server"
+
+  validation {
+    condition     = length(var.project_name) <= 20
+    error_message = "Project name must be 20 characters or less to avoid AWS resource naming limits."
+  }
 }
 
-variable "environment" {
-  description = "Environment name (dev, staging, prod)"
-  type        = string
-  default     = "development"
-}
-
-variable "owner_email" {
-  description = "Email address of the resource owner"
-  type        = string
-}
 
 # ============================================
 # Domain & DNS Configuration
@@ -115,13 +110,13 @@ variable "root_volume_type" {
 }
 
 variable "ami_name_filter" {
-  description = "AMI name filter for Ubuntu 24.04"
+  description = "AMI name filter for Ubuntu 24.04 LTS"
   type        = string
-  default     = "ubuntu/images/hbn-ssd/ubuntu-noble-24.04-amd64-server-*"
+  default     = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
 }
 
 variable "ami_owner" {
-  description = "AMI owner ID (Canonical for Ubuntu)"
+  description = "AMI owner ID (099720109477 = Canonical for Ubuntu)"
   type        = string
   default     = "099720109477"
 }

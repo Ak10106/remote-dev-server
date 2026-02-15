@@ -1,10 +1,14 @@
 # ============================================
 # General Configuration
 # ============================================
+# NOTE: AWS Resource Naming Rules
+# - ALB Target Groups: max 32 chars (uses: {project_name}-vscode-tg, {project_name}-claude-tg)
+# - S3 Bucket Prefix: max 37 chars (uses: {project_name}-alb-logs-)
+# - IAM Role Prefix: max 38 chars (uses: {project_name}-vpc-flow-)
+# Keep project_name under 20 characters to avoid naming conflicts
+
 aws_region   = "ap-northeast-1"
-project_name = "remote-dev-server"
-environment  = "development"
-owner_email  = "your.email@example.com"
+project_name = "remote-dev-server"              # Max 20 chars
 
 # ============================================
 # Domain & DNS Configuration
@@ -30,6 +34,9 @@ single_nat_gateway    = true                          # true = cost saving, fals
 instance_type      = "t3.medium"
 root_volume_size   = 100
 root_volume_type   = "gp3"
+
+# Optional: Override AMI filter if Ubuntu 24.04 not available in your region
+# ami_name_filter = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
 
 # ============================================
 # Application Configuration
